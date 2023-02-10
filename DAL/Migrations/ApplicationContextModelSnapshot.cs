@@ -109,7 +109,7 @@ namespace LibraryApi.Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("DAL.Models.Book", b =>

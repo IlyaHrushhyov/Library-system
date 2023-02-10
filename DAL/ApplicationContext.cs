@@ -8,7 +8,6 @@ namespace DAL
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
            : base(options)
         {
-
         }
 
         public DbSet<Book> Books { get; set; }
@@ -16,6 +15,8 @@ namespace DAL
         public DbSet<Author> Authors { get; set; }
 
         public DbSet<Genre> Genres { get; set; }
+
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

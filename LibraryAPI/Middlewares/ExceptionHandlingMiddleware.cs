@@ -43,6 +43,7 @@ namespace LibraryAPI.Middlewares
             exceptionDetails.StackTrace = exception.StackTrace;
 
             context.Response.ContentType = "application/json";
+            context.Response.StatusCode = exceptionDetails.StatusCode;
             await context.Response.WriteAsync(exceptionDetails.ToString());
         }
     }

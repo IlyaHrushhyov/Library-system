@@ -1,7 +1,13 @@
 using LibraryAPI.Extensions;
 using LibraryAPI.Middlewares;
+using Serilog;
+
+var logger = new LoggerConfiguration()
+    .WriteTo.File("log.txt")
+    .CreateLogger();
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.AddSerilog(logger);
 
 builder.Services.AddControllers(options =>
 {

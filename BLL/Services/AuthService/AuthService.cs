@@ -12,7 +12,6 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-
 namespace LibraryApi.Services.Services.AuthService
 {
     public class AuthService : IAuthService

@@ -2,7 +2,7 @@
 using DAL;
 using DAL.Models;
 using LibraryApi.Services.Exceptions;
-using LibraryApi.Services.Infrastructure;
+using LibraryApi.Services.Infrastructure.Helpers;
 using LibraryApi.Services.Requests.BookController;
 using Microsoft.EntityFrameworkCore;
 

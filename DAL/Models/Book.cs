@@ -12,6 +12,6 @@
 
         public string Name { get; set; }
 
-        public DateTime Year { get; set; }
+        public int Year { get; set; }
     }
 }

@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
 
-        public DateTime Year { get; set; }
+        public int Year { get; set; }
 
         public Guid UserId { get; set; }
 

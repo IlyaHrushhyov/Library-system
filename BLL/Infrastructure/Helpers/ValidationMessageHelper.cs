@@ -12,9 +12,9 @@
             return $"{propertyName} should not be empty";
         }
 
-        public static string LessThan(string propertyName, DateTime value)
+        public static string Between(string propertyName, int beginValue, int endValue)
         {
-            return $"{propertyName} should be less than {value}";
+            return $"{propertyName} should be inclusively between {beginValue} and {endValue}";
         }
 
         public static string MinLength(string propertyName, int minLength)

@@ -1,13 +1,20 @@
 ﻿using BLL.Requests.BookController;
 using FluentValidation;
 using LibraryApi.Services.Infrastructure.Helpers;
+using LibraryApi.Services.Infrastructure.Providers;
 
 namespace LibraryApi.Services.Validators.BookRequests
 {
     public class UpdateBookRequestValidator : AbstractValidator<UpdateBookRequest>
     {
-        public UpdateBookRequestValidator()
+        private const int MinYearValue = 1;
+
+        private readonly IDateTimeProvider _dateTimeProvider;
+
+        public UpdateBookRequestValidator(IDateTimeProvider dateTimeProvider)
         {
+            _dateTimeProvider = dateTimeProvider;
+
             RuleFor(x => x.Name)
                      .NotNull()
                      .WithMessage(ValidationMessageHelper.Null(nameof(UpdateBookRequest.Name)));
@@ -19,9 +26,9 @@ namespace LibraryApi.Services.Validators.BookRequests
 
             RuleFor(x => x.Year)
                     .NotEmpty()
-                    .WithMessage(ValidationMessageHelper.Empty(nameof(UpdateBookRequest.Year)))
-                    .LessThan(p => DateTime.Now)
-                    .WithMessage(ValidationMessageHelper.LessThan(nameof(UpdateBookRequest.Year), DateTime.Now));
+                    .WithMessage(ValidationMessageHelper.Empty(nameof(CreateBookRequest.Year)))
+                    .InclusiveBetween(MinYearValue, _dateTimeProvider.GetUtcNow().Year)
+                    .WithMessage(ValidationMessageHelper.Between(nameof(CreateBookRequest.Year), MinYearValue, _dateTimeProvider.GetUtcNow().Year));
 
             RuleFor(x => x.Id)
                     .NotEmpty()

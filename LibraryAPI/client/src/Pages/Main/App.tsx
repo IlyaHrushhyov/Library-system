@@ -1,13 +1,39 @@
-import React from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./App.scss";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Login from "../Login/Login";
+import AuthContext from "../../contexts/auth-context";
+import { AppRouter } from "../../components/AppRouter";
+import { authService } from "../../services/auth-service";
 
 function App() {
+  const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [fullName, setFullName] = useState<string>("");
+  const autContextValue = useMemo(
+    () => ({
+      isAuth,
+      fullName,
+      setIsAuth,
+      setFullName,
+    }),
+    [isAuth, fullName]
+  );
+
+  useEffect(() => {
+    authService
+      .getUserInfo()
+      .then((response) => {
+        setIsAuth(true);
+        setFullName(response.data);
+      })
+      .catch(() => {});
+  });
+
   return (
-    <div className="login">
-      <Login />
-    </div>
+    <AuthContext.Provider value={autContextValue!}>
+      {/* <div className="login">
+        
+      </div> */}
+      <AppRouter />
+    </AuthContext.Provider>
   );
 }
 

@@ -17,6 +17,23 @@ namespace LibraryApi.Services.Services.AuthService
             _dbContext = dbContext;
         }
 
+        public string GetUserInfo(string userId)
+        {
+            if(userId is null)
+            {
+                throw new UnauthorizedException(ExceptionMessageHelper.Unauthorized());
+            }
+
+            var user = _dbContext.Users.FirstOrDefault(u => u.Id == Guid.Parse(userId));
+
+            if (user is null)
+            {
+                throw new UnauthorizedException(ExceptionMessageHelper.Unauthorized());
+            }
+
+            return user.FullName;
+        }
+
         public string LoginAsync(LoginRequest request)
         {
             var user = _dbContext.Users.FirstOrDefault(u => u.Login == request.Login);

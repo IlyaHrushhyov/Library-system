@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { TextInput } from "../../components/TextInput";
+import AuthContext from "../../contexts/auth-context";
 import AuthRequest from "../../requests/AuthRequest";
 import RegisterRequest from "../../requests/RegisterRequest";
 import { authService } from "../../services/auth-service";
 import "../Login/Login.scss";
+import "../../Pages/Main/App.scss";
+import { useNavigate } from "react-router-dom";
 
 type ValidationError = string | undefined;
 
@@ -34,6 +37,8 @@ const initialCredsState: RegisterRequest = {
 };
 
 const Login = () => {
+  const navigator = useNavigate();
+  const { isAuth, setIsAuth } = useContext(AuthContext);
   const [creds, setCreds] = useState<RegisterRequest>(initialCredsState);
   const [credsErrorState, setCredsErrorState] = useState<credsErrorState>(
     initialCredsErrorState
@@ -108,23 +113,30 @@ const Login = () => {
   };
 
   const handleLogIn = () => {
+    console.log("123");
     let authRequest: AuthRequest = {
       login: creds.login,
       password: creds.password,
     };
     authService
       .authenticate(authRequest)
-      .then((response) => console.log(response.data))
+      .then((response) => {
+        //setIsAuth!(true);
+        navigator("/mainPage");
+      })
       .catch((error) => {
         console.log("error", error.response.data.Message);
         setAuthErrorState({ errorMessage: error.response.data.Message });
       });
   };
 
-  const handleRegister = async () => {
+  const handleRegister = () => {
     authService
       .register(creds)
-      .then((response) => console.log(response.status))
+      .then(() => {
+        resetForm();
+        setIsLoginPage(true);
+      })
       .catch((error) => {
         console.log("error");
         setAuthErrorState({ errorMessage: error.response.data.Message });
@@ -153,77 +165,81 @@ const Login = () => {
   };
 
   return (
-    <div className="center">
-      {isLoginPage ? (
-        <div style={{ textAlign: "center" }}>Login</div>
-      ) : (
-        <div style={{ textAlign: "center" }}>Register</div>
-      )}
+    <div className="login" key="login">
+      <div className="center">
+        {isLoginPage ? (
+          <div style={{ textAlign: "center" }}>Login</div>
+        ) : (
+          <div style={{ textAlign: "center" }}>Register</div>
+        )}
 
-      {authErrorState.errorMessage && (
-        <div className="alert alert-danger">{authErrorState.errorMessage}</div>
-      )}
+        {authErrorState.errorMessage && (
+          <div className="alert alert-danger">
+            {authErrorState.errorMessage}
+          </div>
+        )}
 
-      {!isLoginPage && (
+        {!isLoginPage && (
+          <TextInput
+            value={creds.fullName}
+            onChange={(value) => handleFullNameChange(value)}
+            placeholder="Full name"
+            error={credsErrorState.fullNameError}
+          />
+        )}
+
         <TextInput
-          value={creds.fullName}
-          onChange={(value) => handleFullNameChange(value)}
-          placeholder="Full name"
-          error={credsErrorState.fullNameError}
+          value={creds.login}
+          onChange={(value) => handleLoginChange(value)}
+          placeholder="Login"
+          error={credsErrorState.loginError}
         />
-      )}
+        <TextInput
+          value={creds.password}
+          onChange={(value) => handlePasswordChange(value)}
+          placeholder="Password"
+          error={credsErrorState.passwordError}
+        />
+        {isLoginPage ? (
+          <button
+            disabled={isFormInvalid()}
+            onClick={() => handleLogIn()}
+            className="btn btn-primary"
+          >
+            Log in
+          </button>
+        ) : (
+          <button
+            disabled={isFormInvalid()}
+            onClick={() => handleRegister()}
+            className="btn btn-primary"
+          >
+            Register
+          </button>
+        )}
 
-      <TextInput
-        value={creds.login}
-        onChange={(value) => handleLoginChange(value)}
-        placeholder="Login"
-        error={credsErrorState.loginError}
-      />
-      <TextInput
-        value={creds.password}
-        onChange={(value) => handlePasswordChange(value)}
-        placeholder="Password"
-        error={credsErrorState.passwordError}
-      />
-      {isLoginPage ? (
-        <button
-          disabled={isFormInvalid()}
-          onClick={() => handleLogIn()}
-          className="btn btn-primary"
-        >
-          Log in
-        </button>
-      ) : (
-        <button
-          disabled={isFormInvalid()}
-          onClick={() => handleRegister()}
-          className="btn btn-primary"
-        >
-          Register
-        </button>
-      )}
-
-      {isLoginPage ? (
-        <button
-          onClick={() => {
-            setIsLoginPage(false);
-            resetForm();
-          }}
-          className="btn btn-primary"
-        >
-          Register now
-        </button>
-      ) : (
-        <button
-          onClick={() => {
-            setIsLoginPage(true);
-            resetForm();
-          }}
-          className="btn btn-primary"
-        >
-          Back to login page
-        </button>
-      )}
+        {isLoginPage ? (
+          <button
+            onClick={() => {
+              setIsLoginPage(false);
+              resetForm();
+            }}
+            className="btn btn-primary"
+          >
+            Register now
+          </button>
+        ) : (
+          <button
+            onClick={() => {
+              setIsLoginPage(true);
+              resetForm();
+            }}
+            className="btn btn-primary"
+          >
+            Back to login page
+          </button>
+        )}
+      </div>
     </div>
   );
 };

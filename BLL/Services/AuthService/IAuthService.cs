@@ -6,5 +6,6 @@ namespace LibraryApi.Services.Services.AuthService
     {
         public Task RegisterAsync(RegisterRequest registerRequest);
         public string LoginAsync(LoginRequest loginRequest);
+        public string GetUserInfo(string userID);
     }
 }

@@ -1,7 +1,7 @@
 ﻿using LibraryApi.Services.Requests.AuthController;
 using LibraryApi.Services.Services.AuthService;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Security.Claims;
@@ -27,6 +27,17 @@ namespace LibraryAPI.Controllers
             return Created(string.Empty, null);
         }
 
+        [HttpGet("getUserInfo")]
+        [Authorize]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        public IActionResult GetUserInfo()
+        {
+            var userId = HttpContext.User.Claims.First(x => x.Type is ClaimTypes.NameIdentifier).Value;
+            var userFullName = _authService.GetUserInfo(userId);
+
+            return Ok(userFullName);
+        }
+
         [HttpPost("login")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Created)]
         public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request)
@@ -45,6 +56,7 @@ namespace LibraryAPI.Controllers
                                    {
                                        IsPersistent = true,
                                    });
+            Response.Redirect("https://localhost:7146/sdfsdfsdf");
 
             return Created(string.Empty, protectedUserId);
         }

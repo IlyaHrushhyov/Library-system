@@ -51,6 +51,7 @@ app.UseCors(builder => builder
                             .AllowAnyMethod()
                             .AllowAnyOrigin());
 app.ConfigureMiddlewares();
+app.UseHttpsRedirection();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();

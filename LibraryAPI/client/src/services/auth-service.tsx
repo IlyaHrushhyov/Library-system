@@ -1,0 +1,13 @@
+import AuthModel from "../requests/AuthRequest";
+import RegistrationModel from "../models/UserModel";
+import { axiosInstance } from "./service-base";
+
+export const authService = {
+  async register(userModel: RegistrationModel) {
+    console.log("Register");
+    return await axiosInstance.post(`Auth/register`, userModel);
+  },
+  async authenticate(authModel: AuthModel) {
+    return await axiosInstance.post(`Auth/login`, authModel);
+  },
+};

@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.2">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -19,6 +21,11 @@
   <ItemGroup>
     <ProjectReference Include="..\BLL\LibraryApi.Services.csproj" />
     <ProjectReference Include="..\DAL\LibraryApi.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="client\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

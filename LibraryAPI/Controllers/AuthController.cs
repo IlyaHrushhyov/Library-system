@@ -1,7 +1,10 @@
 ﻿using LibraryApi.Services.Requests.AuthController;
 using LibraryApi.Services.Services.AuthService;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 
 namespace LibraryAPI.Controllers
 {
@@ -26,10 +29,24 @@ namespace LibraryAPI.Controllers
 
         [HttpPost("login")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Created)]
-        public IActionResult LoginAsync([FromBody] LoginRequest request)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request)
         {
-            var jwtToken = _authService.LoginAsync(request);
-            return Created(string.Empty, jwtToken);
+            var protectedUserId = _authService.LoginAsync(request);
+
+            await Response.HttpContext.SignInAsync("cookies", new ClaimsPrincipal(new ClaimsIdentity(
+                                   new Claim[]
+                                   {
+                                        new Claim(ClaimTypes.NameIdentifier, protectedUserId),
+                                   },
+                                   "cookies"
+                                   )
+                                   ),
+                                   new AuthenticationProperties()
+                                   {
+                                       IsPersistent = true,
+                                   });
+
+            return Created(string.Empty, protectedUserId);
         }
     }
 }

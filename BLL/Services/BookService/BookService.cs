@@ -43,15 +43,15 @@ namespace BLL.Services.BookService
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Book>> GetUserBooksAsync(GetUserBooksRequest request)
+        public async Task<List<Book>> GetUserBooksAsync(string userId)
         {
-            var userExists = _dbContext.Users.Where(u => u.Id == request.Id).Any();
+            var userExists = _dbContext.Users.Where(u => u.Id == Guid.Parse(userId)).Any();
             if(userExists is not true)
             {
-                throw new NotFoundException(ExceptionMessageHelper.NotFound(typeof(User), nameof(GetUserBooksRequest.Id), request.Id));
+                throw new NotFoundException(ExceptionMessageHelper.NotFound(typeof(User), nameof(GetUserBooksRequest.Id), userId));
             }
 
-            var userBooks = await _dbContext.Books.Where(b => b.UserId == request.Id).ToListAsync();
+            var userBooks = await _dbContext.Books.Where(b => b.UserId == Guid.Parse(userId)).ToListAsync();
 
             return userBooks;
         }

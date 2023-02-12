@@ -4,6 +4,7 @@ using DAL.Models;
 using LibraryApi.Services.Requests.BookController;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using System.Security.Claims;
 
 namespace LibraryAPI.Controllers
 {
@@ -28,9 +29,10 @@ namespace LibraryAPI.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<Book>), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> GetUserBooksAsync(GetUserBooksRequest request)
+        public async Task<IActionResult> GetUserBooksAsync()
         {
-            var books = await _bookService.GetUserBooksAsync(request);
+            var userId = HttpContext.User.Claims.First(x => x.Type is ClaimTypes.NameIdentifier).Value;
+            var books = await _bookService.GetUserBooksAsync(userId);
 
             return Ok(books);
         }

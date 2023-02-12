@@ -22,6 +22,7 @@ namespace LibraryAPI.Extensions
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();
+            services.AddSpaStaticFiles(opts => opts.RootPath = "wwwroot/");
         }
 
         public static void ConfigureValidators(this IServiceCollection services)

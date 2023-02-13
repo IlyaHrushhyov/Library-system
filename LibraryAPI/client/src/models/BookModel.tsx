@@ -5,4 +5,5 @@ export default interface BookModel {
   userId: string;
   name: string;
   year: number;
+  authorName: string;
 }

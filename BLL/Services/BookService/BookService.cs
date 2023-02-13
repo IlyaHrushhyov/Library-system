@@ -4,6 +4,7 @@ using DAL.Models;
 using LibraryApi.Services.Exceptions;
 using LibraryApi.Services.Infrastructure.Helpers;
 using LibraryApi.Services.Requests.BookController;
+using LibraryApi.Services.Respons.BookController;
 using Microsoft.EntityFrameworkCore;
 
 namespace BLL.Services.BookService
@@ -37,13 +38,14 @@ namespace BLL.Services.BookService
                 GenreId = request.GenreId,
                 Name = request.Name,
                 Year = request.Year,
+                UserId= request.UserId
             };
 
             _dbContext.Books.Add(book);
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<List<Book>> GetUserBooksAsync(string userId)
+        public async Task<List<UserBookInfo>> GetUserBooksAsync(string userId)
         {
             var userExists = _dbContext.Users.Where(u => u.Id == Guid.Parse(userId)).Any();
             if(userExists is not true)
@@ -51,9 +53,20 @@ namespace BLL.Services.BookService
                 throw new NotFoundException(ExceptionMessageHelper.NotFound(typeof(User), nameof(GetUserBooksRequest.Id), userId));
             }
 
-            var userBooks = await _dbContext.Books.Where(b => b.UserId == Guid.Parse(userId)).ToListAsync();
+            var books = await _dbContext.Books.Where(b => b.UserId == Guid.Parse(userId)).ToListAsync();
 
-            return userBooks;
+            var userBookInfos = books.Join(_dbContext.Authors, b => b.AuthorId, a => a.Id, (b, a) => new UserBookInfo
+            {
+                AuthorName = a.FullName,
+                AuthorId = a.Id,
+                Id = b.Id,
+                GenreId = b.GenreId,
+                UserId = b.UserId,
+                Name = b.Name,
+                Year = b.Year
+            }).ToList();
+
+            return userBookInfos;
         }
 
         public async Task UpdateBookAsync(UpdateBookRequest request)

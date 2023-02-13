@@ -2,7 +2,9 @@
 using DAL;
 using FluentValidation.AspNetCore;
 using LibraryApi.Services.Infrastructure.Providers;
+using LibraryApi.Services.Services.AuthorService;
 using LibraryApi.Services.Services.AuthService;
+using LibraryApi.Services.Services.GenreService;
 using LibraryApi.Services.Validators.AuthRequests;
 using LibraryAPI.Middlewares;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +23,8 @@ namespace LibraryAPI.Extensions
             services.AddSingleton<ExceptionHandlingMiddleware>();
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IGenreService, GenreService>();
+            services.AddScoped<IAuthorService, AuthorService>();
             services.AddScoped<IDateTimeProvider, DateTimeProvider>();
             services.AddSpaStaticFiles(opts => opts.RootPath = "wwwroot/");
         }

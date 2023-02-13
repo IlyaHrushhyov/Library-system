@@ -1,8 +1,7 @@
 export default interface UpdateBookRequest {
-  id: string;
+  id: number;
   name: string;
   year: number;
-  userId: string;
-  authorId: string;
-  genreId: string;
+  authorId: number;
+  genreId: number;
 }

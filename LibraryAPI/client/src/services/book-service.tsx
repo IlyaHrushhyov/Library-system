@@ -8,13 +8,13 @@ export const bookService = {
   async create(createBookRequest: CreateBookRequest) {
     return await axiosInstance.post(`Book`, createBookRequest);
   },
-  async getUserBooks(getUserBooksRequest: GetUserBooksRequest) {
+  async getUserBooks() {
     return await axiosInstance.get(`Book`);
   },
-  async updateBook(updateBookRequest: UpdateBookRequest) {
+  async update(updateBookRequest: UpdateBookRequest) {
     return await axiosInstance.put(`Book`, updateBookRequest);
   },
-  async deleteBook(deleteBookRequest: DeleteBookRequest) {
+  async delete(deleteBookRequest: DeleteBookRequest) {
     return await axiosInstance.put(`Book`, deleteBookRequest);
   },
 };

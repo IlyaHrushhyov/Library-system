@@ -1,4 +1,4 @@
 export default interface AuthorModel {
-  id: string;
+  id: number;
   fullName: string;
 }

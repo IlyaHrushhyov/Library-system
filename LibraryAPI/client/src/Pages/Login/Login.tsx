@@ -114,15 +114,15 @@ const Login = () => {
 
   const handleLogIn = () => {
     console.log("123");
-    let authRequest: AuthRequest = {
+    const authRequest: AuthRequest = {
       login: creds.login,
       password: creds.password,
     };
     authService
       .authenticate(authRequest)
       .then((response) => {
-        //setIsAuth!(true);
-        navigator("/mainPage");
+        setIsAuth!(true);
+        navigator("/main");
       })
       .catch((error) => {
         console.log("error", error.response.data.Message);
@@ -182,7 +182,7 @@ const Login = () => {
         {!isLoginPage && (
           <TextInput
             value={creds.fullName}
-            onChange={(value) => handleFullNameChange(value)}
+            onChange={(value) => handleFullNameChange(String(value))}
             placeholder="Full name"
             error={credsErrorState.fullNameError}
           />
@@ -190,13 +190,13 @@ const Login = () => {
 
         <TextInput
           value={creds.login}
-          onChange={(value) => handleLoginChange(value)}
+          onChange={(value) => handleLoginChange(String(value))}
           placeholder="Login"
           error={credsErrorState.loginError}
         />
         <TextInput
           value={creds.password}
-          onChange={(value) => handlePasswordChange(value)}
+          onChange={(value) => handlePasswordChange(String(value))}
           placeholder="Password"
           error={credsErrorState.passwordError}
         />

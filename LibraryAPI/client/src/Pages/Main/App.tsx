@@ -3,10 +3,17 @@ import "./App.scss";
 import AuthContext from "../../contexts/auth-context";
 import { AppRouter } from "../../components/AppRouter";
 import { authService } from "../../services/auth-service";
+import { authorService } from "../../services/author-service";
+import GenreModel from "../../models/GenreModel";
+import AuthorModel from "../../models/AuthorModel";
+import { genreService } from "../../services/genre-service";
+import InfoContext from "../../contexts/info-context";
 
 function App() {
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [fullName, setFullName] = useState<string>("");
+  const [authors, setAuthors] = useState<AuthorModel[]>([]);
+  const [genres, setGenres] = useState<GenreModel[]>([]);
   const autContextValue = useMemo(
     () => ({
       isAuth,
@@ -17,6 +24,16 @@ function App() {
     [isAuth, fullName]
   );
 
+  const infoContextValue = useMemo(
+    () => ({
+      authors,
+      genres,
+      setAuthors,
+      setGenres,
+    }),
+    [authors, genres]
+  );
+
   useEffect(() => {
     authService
       .getUserInfo()
@@ -25,14 +42,27 @@ function App() {
         setFullName(response.data);
       })
       .catch(() => {});
-  });
+
+    authorService
+      .getAuthors()
+      .then((response) => {
+        setAuthors(response.data);
+      })
+      .catch(() => {});
+
+    genreService
+      .getGenres()
+      .then((response) => {
+        setGenres(response.data);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <AuthContext.Provider value={autContextValue!}>
-      {/* <div className="login">
-        
-      </div> */}
-      <AppRouter />
+      <InfoContext.Provider value={infoContextValue!}>
+        <AppRouter />
+      </InfoContext.Provider>
     </AuthContext.Provider>
   );
 }

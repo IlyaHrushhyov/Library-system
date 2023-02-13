@@ -22,6 +22,8 @@ namespace LibraryAPI.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Created)]
         public async Task<IActionResult> CreateBookAsync([FromBody] CreateBookRequest request)
         {
+            var userId = HttpContext.User.Claims.First(x => x.Type is ClaimTypes.NameIdentifier).Value;
+            request.UserId = Guid.Parse(userId);
             await _bookService.CreateBookAsync(request);
 
             return Created(string.Empty, null);

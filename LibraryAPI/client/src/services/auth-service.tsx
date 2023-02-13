@@ -12,4 +12,7 @@ export const authService = {
   async getUserInfo() {
     return await axiosInstance.get(`Auth/getUserInfo`);
   },
+  async logout() {
+    return await axiosInstance.post(`Auth/logout`);
+  },
 };

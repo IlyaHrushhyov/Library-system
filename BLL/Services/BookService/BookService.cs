@@ -109,5 +109,17 @@ namespace BLL.Services.BookService
             _dbContext.Books.RemoveRange(existingBooks);
             await _dbContext.SaveChangesAsync();
         }
+
+        public Book GetBook(GetBookRequest request)
+        {
+            var book = _dbContext.Books.FirstOrDefault(b => b.Id == request.Id);
+
+            if (book is null)
+            {
+                throw new NotFoundException(ExceptionMessageHelper.NotFound(typeof(Book), nameof(request.Id), request.Id));
+            }
+
+            return book;
+        }
     }
 }

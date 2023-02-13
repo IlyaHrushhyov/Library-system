@@ -8,6 +8,7 @@ import GenreModel from "../../models/GenreModel";
 import AuthorModel from "../../models/AuthorModel";
 import { genreService } from "../../services/genre-service";
 import InfoContext from "../../contexts/info-context";
+import { NavBar } from "../../components/NavBar";
 
 function App() {
   const [isAuth, setIsAuth] = useState<boolean>(false);
@@ -61,6 +62,7 @@ function App() {
   return (
     <AuthContext.Provider value={autContextValue!}>
       <InfoContext.Provider value={infoContextValue!}>
+        <NavBar></NavBar>
         <AppRouter />
       </InfoContext.Provider>
     </AuthContext.Provider>

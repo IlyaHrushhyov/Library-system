@@ -1,11 +1,12 @@
-import { useContext, useState } from "react";
-import { TextInput } from "../components/TextInput";
-import CreateBookRequest from "../requests/CreateBookRequest";
-import UpdateBookRequest from "../requests/UpdateBookRequest";
-import { bookService } from "../services/book-service";
-import "../modals/CreateModal";
-import InfoContext from "../contexts/info-context";
-import BookModel from "../models/BookModel";
+import { useContext, useEffect, useState } from "react";
+import { TextInput } from "../../components/TextInput";
+import UpdateBookRequest from "../../requests/UpdateBookRequest";
+import { bookService } from "../../services/book-service";
+import "../../Pages/EditPage/EditPage.scss";
+import InfoContext from "../../contexts/info-context";
+import BookModel from "../../models/BookModel";
+import { useNavigate, useNavigation, useParams } from "react-router-dom";
+import GetBookRequest from "../../requests/GetBookRequest";
 
 type ValidationError = string | undefined;
 
@@ -25,10 +26,10 @@ const initialCreateBookErrorState: CreateBookErrorState = {
 };
 
 const initialErrorValidationState: bookValidationErrorState = {
-  nameError: "",
+  nameError: undefined,
   yearError: undefined,
-  authorIdError: "",
-  genreIdError: "",
+  authorIdError: undefined,
+  genreIdError: undefined,
 };
 
 const initialBookState: UpdateBookRequest = {
@@ -39,24 +40,18 @@ const initialBookState: UpdateBookRequest = {
   genreId: -1,
 };
 
-// interface BookState extends BookModel {
-//   checked: boolean;
-// }
-
-// interface EditModalProps {
-//   isCreatePage: boolean;
-//   book: BookState;
-//   setBooks: (movies: BookState) => void;
-// }
 interface BookState extends BookModel {
   checked: boolean;
 }
 interface EditModalProps {
-  book: BookState;
-  setIsDataLoaded: (movies: true) => void;
+  id: string | undefined;
 }
 
-export const EditModal = (props: EditModalProps) => {
+export const EditPage = () => {
+  const params = useParams();
+  const navigator = useNavigate();
+  console.log(params.id);
+
   const [book, setBook] = useState<UpdateBookRequest>(initialBookState);
   const [errorValidationState, setErrorValidationState] =
     useState<bookValidationErrorState>(initialErrorValidationState);
@@ -64,6 +59,20 @@ export const EditModal = (props: EditModalProps) => {
     useState<CreateBookErrorState>(initialCreateBookErrorState);
 
   const { genres, authors } = useContext(InfoContext);
+
+  useEffect(() => {
+    const getBookRequest: GetBookRequest = {
+      id: params.id!,
+    };
+    bookService
+      .getBook(getBookRequest)
+      .then((response) => {
+        setBook(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
 
   const isNameValid = (name: string) => {
     if (name.length >= 1) {
@@ -165,25 +174,6 @@ export const EditModal = (props: EditModalProps) => {
     }
   };
 
-  const handleCreate = () => {
-    console.log("creation");
-    const createRequest: CreateBookRequest = {
-      name: book.name,
-      year: book.year,
-      authorId: book.authorId,
-      genreId: book.genreId,
-    };
-    bookService
-      .create(createRequest)
-      .then((response) => {
-        console.log("created");
-      })
-      .catch((error) => {
-        console.log("error", error.response.data.Message);
-        setCreateBookErrorState({ errorMessage: error.response.data.Message });
-      });
-  };
-
   const handleUpdate = () => {
     console.log("update");
     const updateRequest: UpdateBookRequest = {
@@ -195,9 +185,7 @@ export const EditModal = (props: EditModalProps) => {
     };
     bookService
       .update(updateRequest)
-      .then(() => {
-        resetForm();
-      })
+      .then(() => navigator(`/main`))
       .catch((error) => {
         console.log("error");
         setCreateBookErrorState({ errorMessage: error.response.data.Message });
@@ -225,115 +213,89 @@ export const EditModal = (props: EditModalProps) => {
   };
 
   return (
-    <div
-      className="modal fade"
-      id="editModal"
-      tabIndex={-1}
-      aria-labelledby="exampleModalLabel"
-      aria-hidden="true"
-    >
-      <div className="modal-dialog">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title" id="exampleModalLabel">
-              Update book
-            </h5>
+    <div className="center-edit" key="edit">
+      <div className="center-edit1">
+        <div style={{ textAlign: "center" }}>Update</div>
 
-            <button
-              onClick={resetForm}
-              type="button"
-              className="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
+        {createBookErrorState.errorMessage && (
+          <div className="alert alert-danger">
+            {createBookErrorState.errorMessage}
           </div>
-          <div className="modal-body p-2 mr-3">
-            {createBookErrorState.errorMessage && (
-              <div className="alert alert-danger">
-                {createBookErrorState.errorMessage}
-              </div>
-            )}
+        )}
+        <div className="p-1 mr-3">
+          <TextInput
+            type="text"
+            value={book.name}
+            onChange={(value) => handleNameChange(String(value))}
+            placeholder="Name"
+            error={errorValidationState.nameError}
+          />
+        </div>
 
-            <div className="p-2 mr-3">
-              <TextInput
-                type="text"
-                value={book.name}
-                onChange={(value) => handleNameChange(String(value))}
-                placeholder="Name"
-                error={errorValidationState.nameError}
-              />
-            </div>
+        <div className="p-1 mr-3">
+          <TextInput
+            type="number"
+            value={book.year}
+            onChange={(value) => handleYearChange(Number(value))}
+            placeholder="Year"
+            error={errorValidationState.yearError}
+          />
+        </div>
 
-            <div className="p-2 mr-3">
-              <TextInput
-                type="number"
-                value={book.year}
-                onChange={(value) => handleYearChange(Number(value))}
-                placeholder="Year"
-                error={errorValidationState.yearError}
-              />
-            </div>
-
-            <div className="p-2 mr-3">
-              <select
-                onChange={(e) => handleSetGenreInBook(e.target.value)}
-                className="form-select"
-                placeholder="Genre"
-              >
-                <option disabled selected hidden>
-                  Genre
+        <div className="p-1 mr-3">
+          <select
+            onChange={(e) => handleSetGenreInBook(e.target.value)}
+            className="form-select"
+            placeholder="Genre"
+          >
+            {/* <option disabled selected hidden>
+              Genre
+            </option> */}
+            {genres.map((genre) => {
+              return (
+                <option key={genre.id} selected={book.genreId === genre.id}>
+                  {genre.name}
                 </option>
-                {genres.map((genre) => {
-                  return <option key={genre.id}>{genre.name}</option>;
-                })}
-              </select>
-            </div>
+              );
+            })}
+          </select>
+        </div>
 
-            <div className="p-2 mr-3">
-              <select
-                onChange={(e) => handleSetAuthorInBook(e.target.value)}
-                className="form-select"
-              >
-                <option disabled selected hidden>
-                  Author
+        <div className="p-1 mr-3">
+          <select
+            onChange={(e) => handleSetAuthorInBook(e.target.value)}
+            className="form-select"
+          >
+            {/* <option disabled selected hidden>
+              Author
+            </option> */}
+            {authors.map((author) => {
+              return (
+                <option key={author.id} selected={book.authorId === author.id}>
+                  {author.fullName}
                 </option>
-                {authors.map((author) => {
-                  return <option key={author.id}>{author.fullName}</option>;
-                })}
-              </select>
-            </div>
+              );
+            })}
+          </select>
+        </div>
 
-            {/* <TextInput
-              value={creds.login}
-              onChange={(value) => handleLoginChange(value)}
-              placeholder="Login"
-              error={credsErrorState.loginError}
-            /> */}
-            {/* <TextInput
-              value={book.password}
-              onChange={(value) => handlePasswordChange(value)}
-              placeholder="Password"
-              error={credsErrorState.passwordError}
-            /> */}
-          </div>
-          <div className="modal-footer">
-            <button
-              onClick={resetForm}
-              type="button"
-              className="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Close
-            </button>
+        <div className="modal-footer">
+          <button
+            onClick={resetForm}
+            type="button"
+            className="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Back
+          </button>
 
-            <button
-              disabled={isFormInvalid()}
-              onClick={() => handleUpdate()}
-              className="btn btn-primary"
-            >
-              Update
-            </button>
-          </div>
+          <button
+            disabled={isFormInvalid()}
+            onClick={() => handleUpdate()}
+            className="btn btn-primary"
+          >
+            Update
+          </button>
         </div>
       </div>
     </div>

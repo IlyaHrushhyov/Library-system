@@ -2,7 +2,6 @@ using LibraryAPI.Extensions;
 using LibraryAPI.Middlewares;
 using Serilog;
 
-
 var logger = new LoggerConfiguration()
     .WriteTo.File("log.txt")
     .CreateLogger();
@@ -30,8 +29,6 @@ builder.Services.ConfigureDataAccess(builder.Configuration.GetConnectionString("
 
 var app = builder.Build();
 
-
-
 app.UseRouting();
 
 app.UseAuthentication();
@@ -55,11 +52,6 @@ app.UseHttpsRedirection();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
-
-    //if (!app.Environment.IsDevelopment())
-    //{
-    //    endpoints.MapFallbackToFile("index.html");
-    //}
 });
 
 if (app.Environment.IsDevelopment())

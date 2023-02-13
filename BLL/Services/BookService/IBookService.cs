@@ -1,4 +1,6 @@
 ﻿using BLL.Requests.BookController;
+using DAL.Models;
+using LibraryApi.Services.Requests.BookController;
 using LibraryApi.Services.Respons.BookController;
 
 namespace BLL.Services.BookService
@@ -9,5 +11,6 @@ namespace BLL.Services.BookService
         public Task<List<UserBookInfo>> GetUserBooksAsync(string request);
         public Task UpdateBookAsync(UpdateBookRequest request);
         public Task DeleteBooksAsync(DeleteBookRequest request);
+        public Book GetBook(GetBookRequest id);
     }
 }

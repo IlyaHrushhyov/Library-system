@@ -29,7 +29,7 @@ namespace LibraryAPI.Controllers
             return Created(string.Empty, null);
         }
 
-        [HttpGet]
+        [HttpGet("getUserBooks")]
         [ProducesResponseType(typeof(List<Book>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetUserBooksAsync()
         {
@@ -37,6 +37,15 @@ namespace LibraryAPI.Controllers
             var books = await _bookService.GetUserBooksAsync(userId);
 
             return Ok(books);
+        }
+
+        [HttpGet("getBook")]
+        [ProducesResponseType(typeof(Book), (int)HttpStatusCode.OK)]
+        public IActionResult GetBook([FromQuery]GetBookRequest request)
+        {
+            var book = _bookService.GetBook(request);
+
+            return Ok(book);
         }
 
         [HttpPut]

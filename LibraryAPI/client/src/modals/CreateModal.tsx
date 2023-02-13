@@ -3,7 +3,7 @@ import { TextInput } from "../components/TextInput";
 import CreateBookRequest from "../requests/CreateBookRequest";
 import UpdateBookRequest from "../requests/UpdateBookRequest";
 import { bookService } from "../services/book-service";
-import "../modals/CreateModal";
+import "../modals/CreateModal.scss";
 import InfoContext from "../contexts/info-context";
 import BookModel from "../models/BookModel";
 
@@ -48,15 +48,8 @@ const initialBookState: UpdateBookRequest = {
 //   book: BookState;
 //   setBooks: (movies: BookState) => void;
 // }
-interface BookState extends BookModel {
-  checked: boolean;
-}
-interface EditModalProps {
-  book: BookState;
-  setIsDataLoaded: (movies: true) => void;
-}
 
-export const EditModal = (props: EditModalProps) => {
+export const CreateModal = () => {
   const [book, setBook] = useState<UpdateBookRequest>(initialBookState);
   const [errorValidationState, setErrorValidationState] =
     useState<bookValidationErrorState>(initialErrorValidationState);
@@ -64,6 +57,8 @@ export const EditModal = (props: EditModalProps) => {
     useState<CreateBookErrorState>(initialCreateBookErrorState);
 
   const { genres, authors } = useContext(InfoContext);
+
+  const [isCreatePage, setIsCreatePage] = useState<boolean>(true);
 
   const isNameValid = (name: string) => {
     if (name.length >= 1) {
@@ -227,7 +222,7 @@ export const EditModal = (props: EditModalProps) => {
   return (
     <div
       className="modal fade"
-      id="editModal"
+      id="createModal"
       tabIndex={-1}
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
@@ -235,9 +230,15 @@ export const EditModal = (props: EditModalProps) => {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="exampleModalLabel">
-              Update book
-            </h5>
+            {isCreatePage ? (
+              <h5 className="modal-title" id="exampleModalLabel">
+                Create book
+              </h5>
+            ) : (
+              <h5 className="modal-title" id="exampleModalLabel">
+                Update book
+              </h5>
+            )}
 
             <button
               onClick={resetForm}
@@ -325,14 +326,23 @@ export const EditModal = (props: EditModalProps) => {
             >
               Close
             </button>
-
-            <button
-              disabled={isFormInvalid()}
-              onClick={() => handleUpdate()}
-              className="btn btn-primary"
-            >
-              Update
-            </button>
+            {isCreatePage ? (
+              <button
+                disabled={isFormInvalid()}
+                onClick={() => handleCreate()}
+                className="btn btn-primary"
+              >
+                Create
+              </button>
+            ) : (
+              <button
+                disabled={isFormInvalid()}
+                onClick={() => handleUpdate()}
+                className="btn btn-primary"
+              >
+                Update
+              </button>
+            )}
           </div>
         </div>
       </div>

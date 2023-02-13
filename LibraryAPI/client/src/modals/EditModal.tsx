@@ -3,7 +3,7 @@ import { TextInput } from "../components/TextInput";
 import CreateBookRequest from "../requests/CreateBookRequest";
 import UpdateBookRequest from "../requests/UpdateBookRequest";
 import { bookService } from "../services/book-service";
-import "../modals/CreateModal.scss";
+import "../modals/EditModal.scss";
 import InfoContext from "../contexts/info-context";
 
 type ValidationError = string | undefined;
@@ -38,7 +38,11 @@ const initialBookState: UpdateBookRequest = {
   genreId: -1,
 };
 
-export const CreateModal = () => {
+interface CreateModalProps {
+  isCreatePage: boolean;
+}
+
+export const EditModal = () => {
   const [book, setBook] = useState<UpdateBookRequest>(initialBookState);
   const [errorValidationState, setErrorValidationState] =
     useState<bookValidationErrorState>(initialErrorValidationState);

@@ -5,7 +5,16 @@ export const BookComponent = (props: BookModel) => {
     <div className="card">
       <div className="row"></div>
       <div className="card-header">
-        <h3 className="card-title">{props.name}</h3>
+        <div className="row mx-md-n5">
+          <h3 className="card-title col px-md-5">{props.name}</h3>
+          <button
+            className="col  btn btn-sm btn-outline-secondary"
+            data-bs-toggle="modal"
+            data-bs-target="#exampleModal"
+          >
+            Update
+          </button>
+        </div>
       </div>
       <div className="card-body">
         <h3 className="card-title">{props.authorName}</h3>

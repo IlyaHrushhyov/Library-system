@@ -36,7 +36,7 @@ namespace LibraryApi.Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Authors");
+                    b.ToTable("Authors", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Book", b =>
@@ -69,7 +69,7 @@ namespace LibraryApi.Models.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Genre", b =>
@@ -86,7 +86,7 @@ namespace LibraryApi.Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres");
+                    b.ToTable("Genres", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.User", b =>
@@ -109,7 +109,7 @@ namespace LibraryApi.Models.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Book", b =>

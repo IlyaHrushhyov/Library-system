@@ -99,6 +99,28 @@ namespace LibraryApi.Models.Migrations
                 name: "IX_Books_UserId",
                 table: "Books",
                 column: "UserId");
+
+            migrationBuilder.InsertData(
+                table: "Authors",
+                columns: new[] { "Id", "FullName" },
+                values: new object[,]
+                {
+                    { 1, "Stephen King" },
+                    { 2, "William Shakespeare" },
+                    { 3, "Thomas Wyatt" },
+                    { 4, "Oscar Wilde" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Genres",
+                columns: new[] { "Id", "Name" },
+                values: new object[,]
+                {
+                    { 1, "Adventure" },
+                    { 2, "Detective" },
+                    { 3, "Horror" },
+                    { 4, "Fantasy" }
+                });
         }
 
         /// <inheritdoc />
@@ -115,6 +137,46 @@ namespace LibraryApi.Models.Migrations
 
             migrationBuilder.DropTable(
                 name: "Users");
+
+            migrationBuilder.DeleteData(
+                table: "Authors",
+                keyColumn: "Id",
+                keyValue: 1);
+
+            migrationBuilder.DeleteData(
+                table: "Authors",
+                keyColumn: "Id",
+                keyValue: 2);
+
+            migrationBuilder.DeleteData(
+                table: "Authors",
+                keyColumn: "Id",
+                keyValue: 3);
+
+            migrationBuilder.DeleteData(
+                table: "Authors",
+                keyColumn: "Id",
+                keyValue: 4);
+
+            migrationBuilder.DeleteData(
+                table: "Genres",
+                keyColumn: "Id",
+                keyValue: 1);
+
+            migrationBuilder.DeleteData(
+                table: "Genres",
+                keyColumn: "Id",
+                keyValue: 2);
+
+            migrationBuilder.DeleteData(
+                table: "Genres",
+                keyColumn: "Id",
+                keyValue: 3);
+
+            migrationBuilder.DeleteData(
+                table: "Genres",
+                keyColumn: "Id",
+                keyValue: 4);
         }
     }
 }

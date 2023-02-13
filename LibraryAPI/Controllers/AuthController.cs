@@ -38,6 +38,16 @@ namespace LibraryAPI.Controllers
             return Ok(userFullName);
         }
 
+        [HttpPost("logout")]
+        [Authorize]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.Created)]
+        public async Task<IActionResult> Logout()
+        {
+            await Response.HttpContext.SignOutAsync();
+
+            return Created(string.Empty, null);
+        }
+
         [HttpPost("login")]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.Created)]
         public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request)

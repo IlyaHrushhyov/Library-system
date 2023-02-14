@@ -16,5 +16,6 @@
 Название строки соединения использовать "LibraryDb".
 
 2) Запустить backend приложение(https://github.com/IlyaHrushhyov/Library-system/tree/master/LibraryAPI) - будет запущено на 7146 порту
-3) Запустить frontend приложение(https://github.com/IlyaHrushhyov/Library-system/tree/master/LibraryAPI/client) - будет запущено на 3000 порту
-4) Последний шаг - перейти по https://localhost:7146/ для доступа к клиенту.
+3) Через Swagger сделать тестовый запрос на БД по любому из предоставляемых путей для инициализации БД.
+4) Запустить frontend приложение(https://github.com/IlyaHrushhyov/Library-system/tree/master/LibraryAPI/client) - будет запущено на 3000 порту
+5) Последний шаг - перейти по https://localhost:7146/ для доступа к клиентскому приложению.

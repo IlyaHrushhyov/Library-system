@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace LibraryAPI.Middlewares
+namespace LibraryAPI.Middlewares.Models
 {
     public class ExceptionDetails
     {

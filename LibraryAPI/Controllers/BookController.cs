@@ -2,6 +2,7 @@
 using BLL.Services.BookService;
 using DAL.Models;
 using LibraryApi.Services.Requests.BookController;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Security.Claims;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 namespace LibraryAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class BookController : ControllerBase
     {

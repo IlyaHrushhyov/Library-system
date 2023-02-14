@@ -1,11 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { TextInput } from "../../components/TextInput";
 import UpdateBookRequest from "../../requests/UpdateBookRequest";
 import { bookService } from "../../services/book-service";
 import "../../Pages/EditPage/EditPage.scss";
 import InfoContext from "../../contexts/info-context";
-import { useNavigate, useParams } from "react-router-dom";
-import GetBookRequest from "../../requests/GetBookRequest";
+import { useNavigate } from "react-router-dom";
+import React from "react";
+import CreateBookRequest from "../../requests/CreateBookRequest";
 
 type ValidationError = string | undefined;
 
@@ -25,10 +26,10 @@ const initialCreateBookErrorState: CreateBookErrorState = {
 };
 
 const initialErrorValidationState: bookValidationErrorState = {
-  nameError: undefined,
+  nameError: "",
   yearError: undefined,
-  authorIdError: undefined,
-  genreIdError: undefined,
+  authorIdError: "",
+  genreIdError: "",
 };
 
 const initialBookState: UpdateBookRequest = {
@@ -39,10 +40,8 @@ const initialBookState: UpdateBookRequest = {
   genreId: -1,
 };
 
-export const EditPage = () => {
-  const params = useParams();
+export const CreatePage = () => {
   const navigator = useNavigate();
-
   const [book, setBook] = useState<UpdateBookRequest>(initialBookState);
   const [errorValidationState, setErrorValidationState] =
     useState<bookValidationErrorState>(initialErrorValidationState);
@@ -50,20 +49,6 @@ export const EditPage = () => {
     useState<CreateBookErrorState>(initialCreateBookErrorState);
 
   const { genres, authors } = useContext(InfoContext);
-
-  useEffect(() => {
-    const getBookRequest: GetBookRequest = {
-      id: params.id!,
-    };
-    bookService
-      .getBook(getBookRequest)
-      .then((response) => {
-        setBook(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
 
   const isNameValid = (name: string) => {
     if (name.length >= 1) {
@@ -165,30 +150,27 @@ export const EditPage = () => {
     }
   };
 
-  const handleUpdate = () => {
-    console.log("update");
-    const updateRequest: UpdateBookRequest = {
-      id: book.id,
+  const handleCreate = () => {
+    console.log("creation");
+    const createRequest: CreateBookRequest = {
       name: book.name,
       year: book.year,
       authorId: book.authorId,
       genreId: book.genreId,
     };
     bookService
-      .update(updateRequest)
-      .then(() => navigator(`/main`))
+      .create(createRequest)
+      .then((response) => {
+        console.log("created");
+        navigator(`/main`);
+      })
       .catch((error) => {
-        console.log("error");
+        console.log("error", error.response.data.Message);
         setCreateBookErrorState({ errorMessage: error.response.data.Message });
       });
   };
 
   const isFormInvalid = () => {
-    console.log(typeof errorValidationState.nameError !== "undefined");
-    console.log(typeof errorValidationState.yearError !== "undefined");
-    console.log(typeof errorValidationState.genreIdError !== "undefined");
-    console.log(typeof errorValidationState.authorIdError !== "undefined");
-
     return (
       typeof errorValidationState.nameError !== "undefined" ||
       typeof errorValidationState.yearError !== "undefined" ||
@@ -208,7 +190,7 @@ export const EditPage = () => {
     <div className="center-edit" key="edit">
       <div className="center-edit1">
         <h3 className="card-title" style={{ textAlign: "center" }}>
-          Update
+          Create
         </h3>
 
         {createBookErrorState.errorMessage && (
@@ -236,33 +218,31 @@ export const EditPage = () => {
           />
         </div>
 
-        <div className="p-1 mr-3">
+        <div className="p-2 mr-3">
           <select
             onChange={(e) => handleSetGenreInBook(e.target.value)}
             className="form-select"
             placeholder="Genre"
           >
+            <option disabled selected hidden>
+              Genre
+            </option>
             {genres.map((genre) => {
-              return (
-                <option key={genre.id} selected={book.genreId === genre.id}>
-                  {genre.name}
-                </option>
-              );
+              return <option key={genre.id}>{genre.name}</option>;
             })}
           </select>
         </div>
 
-        <div className="p-1 mr-3">
+        <div className="p-2 mr-3">
           <select
             onChange={(e) => handleSetAuthorInBook(e.target.value)}
             className="form-select"
           >
+            <option disabled selected hidden>
+              Author
+            </option>
             {authors.map((author) => {
-              return (
-                <option key={author.id} selected={book.authorId === author.id}>
-                  {author.fullName}
-                </option>
-              );
+              return <option key={author.id}>{author.fullName}</option>;
             })}
           </select>
         </div>
@@ -279,10 +259,10 @@ export const EditPage = () => {
 
           <button
             disabled={isFormInvalid()}
-            onClick={() => handleUpdate()}
+            onClick={() => handleCreate()}
             className="btn btn-primary"
           >
-            Update
+            Create
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-﻿namespace LibraryAPI.Middlewares
+﻿namespace LibraryAPI.Middlewares.Models
 {
     public class ValidationErrorModel
     {

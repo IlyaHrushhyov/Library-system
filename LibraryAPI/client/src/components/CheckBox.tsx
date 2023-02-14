@@ -1,6 +1,5 @@
 interface CheckBoxProps {
   checked: boolean;
-  //bookId: string;
   onChange: () => void;
 }
 

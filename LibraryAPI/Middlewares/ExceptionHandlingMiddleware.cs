@@ -1,4 +1,5 @@
 ﻿using LibraryApi.Services.Exceptions;
+using LibraryAPI.Middlewares.Models;
 using System.Net;
 
 namespace LibraryAPI.Middlewares

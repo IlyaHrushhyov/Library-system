@@ -15,7 +15,7 @@ export const BookComponent: FC<BookComponetProps> = (props) => {
         <div className="row mx-md-n5">
           <h3 className="card-title col px-md-5">{props.book.name}</h3>
           <button
-            className="col  btn btn-sm btn-outline-secondary"
+            className="col  btn btn-sm btn-secondary"
             onClick={() => navigator(`/edit/${props.book.id}`)}
           >
             Update

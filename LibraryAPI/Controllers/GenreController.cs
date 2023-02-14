@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-
 namespace LibraryAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class GenreController : ControllerBase
     {
@@ -18,7 +18,6 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet("getGenres")]
-        [Authorize]
         [ProducesResponseType(typeof(List<Genre>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetGenres()
         {

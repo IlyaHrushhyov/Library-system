@@ -25,7 +25,7 @@ export const NavBar = () => {
 
         {isAuth && (
           <div>
-            <a className="navbar-brand me-2">{`Wellcome back, ${fullName}!`}</a>
+            <a className="navbar-brand">{`Wellcome back!`}</a>
             <button
               className="btn btn-danger"
               onClick={resetAuthContext}

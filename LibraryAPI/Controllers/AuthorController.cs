@@ -7,6 +7,7 @@ using System.Net;
 namespace LibraryAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class AuthorController : ControllerBase
     {
@@ -17,7 +18,6 @@ namespace LibraryAPI.Controllers
         }
 
         [HttpGet("getAuthors")]
-        [Authorize]
         [ProducesResponseType(typeof(List<Author>), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> GetAuthors()
         {

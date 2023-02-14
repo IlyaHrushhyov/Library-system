@@ -1,0 +1,23 @@
+.center-create {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100vh - 60px);
+  & > * {
+    margin-bottom: 16px;
+  }
+}
+
+.center-create {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  & > * {
+    margin-bottom: 16px;
+  }
+  max-width: 600px;
+}
